@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Recording;
 use App\Schedule;
+use App\Message;
+use App\Tutor;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
@@ -14,28 +16,29 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 class Student extends Model implements AuthenticatableContract
 {
 
-  use Authenticatable;
+ use Authenticatable;
+
 
   protected $table = 'students';
 
 
-  protected $fillable = ['en_name', 'kr_name', 'email', 'password'];
+  protected $fillable = ['en_name', 'kr_name', 'email', 'password', 'tutor_id', 'role', 'chatroute', 'conn_id' ];
 
 
 
   protected $hidden = ['password', 'remember_token'];
 
 
-public function recording(){
 
-return $this->hasMany(Recording::class);
+  public function message(){
 
-}
+    return $this->hasMany(Message::class);
+  }
 
+  public function tutor(){
 
-public function schedule(){
+    return $this->belongsTo(Tutor::class);
+  }
 
-  return $this->hasMany(Schedule::class);
-}
 
 }

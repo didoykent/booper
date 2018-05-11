@@ -28,7 +28,7 @@ class LogOutController extends Controller
     JWTAuth::invalidate($request->token);
           return response()->json(['success' => true]);
     } catch (JWTException $e) {
-       return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.'], 500);
+       return response()->json($e);
     }
 
 

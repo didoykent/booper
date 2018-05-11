@@ -11,7 +11,8 @@
 
 
       <v-btn flat :to = "'student-login'" v-if = "!isLogged" >Login|</v-btn>
-      <v-btn flat :to = "'student-register'"  v-if = "!isLogged">Register</v-btn>
+      <v-btn flat :to = "'student-register'"  v-if = "!isLogged">Student</v-btn>
+      <v-btn flat :to = "'tutor-register'"  v-if = "!isLogged">Tutor</v-btn>
 
 
 
@@ -27,7 +28,7 @@
 
   </v-toolbar>
 
-  <h2 v-if="isLogged">Logged In</h2>
+
 
 
   <router-view></router-view>
@@ -83,6 +84,7 @@ var vm =  this
 
       var vm  = this
       vm.$store.dispatch('studentLogOut')
+      vm.$socket.disconnect()
     }
   }
 }

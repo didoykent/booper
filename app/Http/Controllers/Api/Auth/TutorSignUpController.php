@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use App\Student;
+use App\Tutor;
 
-class SignUpController extends Controller
+class TutorSignUpController extends Controller
 {
     public function studentSignup(Request $request){
 
@@ -21,7 +22,6 @@ class SignUpController extends Controller
         }
 
 
-
 while(true){
 
   try{
@@ -32,25 +32,38 @@ while(true){
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'chatroute' => str_random(30),
-            'role' => "student"
+            'role' => "tutor"
+
+        ]);
+
+
+
+        $tutor = Tutor::create([
+          'id' => $student->id,
+          'en_name' => $request->englishName,
+          'kr_name' => $request->koreanName,
+          'email' => $request->email,
+          'tutor_id' => $student->id,
+          'password' => bcrypt($request->password),
+          'chatroute' => str_random(30),
+          'role' => "tutor"
+
 
         ]);
 
         break;
 
-
 }catch(Exception $e){
 
+}
 
 }
-}
+
 
 
         return response()->json(['success' => $student]);
 
     }
-
-
 
 
 }

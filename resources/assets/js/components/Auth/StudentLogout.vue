@@ -20,10 +20,13 @@ export default{
   },
 
   beforeMount(){
-
+var vm = this
 let token = localStorage.getItem('token');
 
 axios.post('api/student_logout?token='+token).then(function(response){
+
+
+
 
 localStorage.removeItem('token');
 

@@ -13,20 +13,24 @@ import axios from 'axios'
 import App from './App.vue'
 import store from './store'
 import router from './router'
+import VueSocketio from 'vue-socket.io'
 
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify);
+Vue.use(VueSocketio, 'http://localhost:8890');
 
 axios.interceptors.request.use(function(config){
 
 if(localStorage.getItem('token')){
 
-  config.headers.authorization =  'Bearer ' + localStorage.getItem('token');
+  config.headers.Authorization = 'Bearer '+ localStorage.getItem('token');
 
 
 }
+
+
   return config;
 }, function(error){
 
@@ -61,6 +65,15 @@ template: '<app></app>',
 components: {App},
 router,
 store
+
+
+
+
+
+
+
+
+
 
 
 

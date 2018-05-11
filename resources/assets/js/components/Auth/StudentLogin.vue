@@ -47,6 +47,7 @@
 
 
 <script>
+
 import axios from 'axios'
 export default{
 
@@ -73,7 +74,7 @@ console.log('test')
 
 studentLogin(){
  var vm =  this
-
+vm.$socket.connect()
 vm.$store.dispatch('studentLogin', vm.model)
 },
 
