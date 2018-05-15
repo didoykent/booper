@@ -52,7 +52,7 @@ $authuser = JWTAuth::toUser(JWTAuth::getToken());
 
         }
 
-return response()->json(['friendLists' => $friendslists, 'currentName' => $authuser->en_name, 'currentUserId' => $authuser->id, 'role' => $authuser->role, 'unreadMessages' => $allUnread]);
+return response()->json(['friendLists' => $friendslists, 'currentName' => $authuser->en_name, 'currentUserId' => $authuser->id, 'role' => $authuser->role, 'unreadMessages' => $allUnread, 'currentUser' => $authuser]);
 
 
 }

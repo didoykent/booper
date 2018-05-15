@@ -20714,6 +20714,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     vm.$socket.on('Now', function (data) {
       if (vm.isLogged) {
 
+        console.log('sock ko dati', vm.getUserSock);
         vm.socketOp = new FormData();
 
         vm.socketOp.append('socketId', vm.$socket.id);
@@ -20727,10 +20728,21 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
               __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.myFriends[i], 'current_conn_id', data.mySocket);
               __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.myFriends[i], 'previous_conn_id', data.mySocket);
+
+              if (vm.getUserSock['id'] === data.currentUserId) {
+
+                __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.getUserSock, 'current_conn_id', data.mySocket);
+                __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.getUserSock, 'previous_conn_id', data.mySocket);
+              }
             }
           }
+          console.log('sock ko sbong', vm.getUserSock);
+
+          console.log('socket ko sbong', vm.$socket.id);
+
           console.log('muni', response.data.userId);
           console.log('ulihi', vm.myFriends);
+          console.log('friend ko', data.friend);
         }).catch(function (error) {});
       }
     }.bind(this));
@@ -20835,7 +20847,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                   vm.currentUserId = response.data.currentUserId;
                   vm.currentUserRole = response.data.role;
 
-                  vm.$socket.emit('ImOn', { currentUserId: vm.currentUserId, mySocket: vm.$socket.id });
+                  vm.$socket.emit('ImOn', { currentUserId: vm.currentUserId, mySocket: vm.$socket.id, friend: response.data.currentUser });
 
                   setInterval(function () {
                     vm.$socket.emit('friendOnline', vm.currentUserId);

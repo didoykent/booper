@@ -1,4 +1,4 @@
-ew<template>
+<template>
 
 <v-app>
 
@@ -318,6 +318,7 @@ if(data !=null){
 vm.$socket.on('Now', function(data){
   if(vm.isLogged){
 
+console.log('sock ko dati', vm.getUserSock)
   vm.socketOp = new FormData();
 
   vm.socketOp.append('socketId', vm.$socket.id)
@@ -332,10 +333,24 @@ console.log('una', vm.myFriends)
       Vue.set(vm.myFriends[i], 'current_conn_id', data.mySocket)
       Vue.set(vm.myFriends[i], 'previous_conn_id', data.mySocket)
 
+      if(vm.getUserSock['id'] === data.currentUserId){
+
+        Vue.set(vm.getUserSock, 'current_conn_id', data.mySocket)
+        Vue.set(vm.getUserSock, 'previous_conn_id', data.mySocket)
+      }
+
     }
+
+
+
   }
+  console.log('sock ko sbong' , vm.getUserSock)
+
+  console.log('socket ko sbong', vm.$socket.id)
+
     console.log('muni', response.data.userId)
   console.log('ulihi', vm.myFriends)
+  console.log('friend ko', data.friend)
 
 
 
@@ -516,7 +531,7 @@ for(var i =0; i<vm.myFriends.length; i++){
 vm.currentUserId = response.data.currentUserId
 vm.currentUserRole = response.data.role
 
-vm.$socket.emit('ImOn', {currentUserId: vm.currentUserId, mySocket: vm.$socket.id})
+vm.$socket.emit('ImOn', {currentUserId: vm.currentUserId, mySocket: vm.$socket.id, friend: response.data.currentUser})
 
 setInterval(function(){
 vm.$socket.emit('friendOnline', vm.currentUserId)
