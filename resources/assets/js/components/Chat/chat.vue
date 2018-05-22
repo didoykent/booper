@@ -48,12 +48,12 @@
 
 <div  class="suggested">
   <v-list two-line>
-            <template v-for="(item, index) in myMessages">
+            <template v-for="(item, index) in myMessages"  >
               <v-list-tile
                 avatar
                 ripple
                 @click="toggle(index)"
-                :key="item.name"
+
               >
               <v-list-tile-avatar>
                 <img :src="item.avatar">
@@ -207,7 +207,7 @@ watch:{
 myFriends:{
 
   handler: function (val, oldVal) {
-      console.log(val)
+
        },
        deep: true
 }
@@ -256,8 +256,7 @@ for( var i=0; i<data.clientsData.length; i++){
   vm.$socket.on('messageNotification', function(data){
 var vm = this
 
-console.log('kasulod', data.bonusdata)
-console.log('kasulod friends', vm.myFriends)
+
 
 for(var i =0; i<vm.myFriends.length; i++){
 
@@ -318,14 +317,14 @@ if(data !=null){
 vm.$socket.on('Now', function(data){
   if(vm.isLogged){
 
-console.log('sock ko dati', vm.getUserSock)
+
   vm.socketOp = new FormData();
 
   vm.socketOp.append('socketId', vm.$socket.id)
 
   axios.post('api/initializeData', vm.socketOp).then(function(response){
 
-console.log('una', vm.myFriends)
+
   for(var i =0; i<vm.myFriends.length; i++){
 
     if(vm.myFriends[i]['id'] === data.currentUserId){
@@ -344,13 +343,7 @@ console.log('una', vm.myFriends)
 
 
   }
-  console.log('sock ko sbong' , vm.getUserSock)
 
-  console.log('socket ko sbong', vm.$socket.id)
-
-    console.log('muni', response.data.userId)
-  console.log('ulihi', vm.myFriends)
-  console.log('friend ko', data.friend)
 
 
 
@@ -387,14 +380,12 @@ vm.friendLists()
 
 
         Vue.set( vm.myFriends[i], 'isActive', false)
-console.log('munigd', vm.myFriends[i]['previous_conn_id'])
+
 
     }
 
 
-console.log(vm.myFriends)
-console.log('nadisconnect')
-console.log('next ko nga socket', data)
+
 
 
 
@@ -436,7 +427,7 @@ getTestData(){
 
 axios.get('api/testData').then(function(response){
 
-console.log('successFul')
+
 
 }).catch(function(error){
 
@@ -517,6 +508,13 @@ scrollToEnd () {
 
 var vm = this
 
+if(vm.isLogged){
+
+
+vm.$socket.connect()
+
+
+}
 
      await axios.get('api/getFriendLists').then(function(response){
   let unreadMessages = response.data.unreadMessages
@@ -534,8 +532,11 @@ vm.currentUserRole = response.data.role
 vm.$socket.emit('ImOn', {currentUserId: vm.currentUserId, mySocket: vm.$socket.id, friend: response.data.currentUser})
 
 setInterval(function(){
+
 vm.$socket.emit('friendOnline', vm.currentUserId)
 }, 2000);
+
+
       }).catch(function(error){
 
         console.log(error)
@@ -552,13 +553,13 @@ vm.$socket.emit('friendOnline', vm.currentUserId)
        axios.get('api/getUnreadMessages').then(function(response){
         let unreadMessages = response.data.allUnread
 
-        console.log('listKo', response.data.myLists)
+
         for(var i =0; i<vm.myFriends.length; i++){
           Vue.set(vm.myFriends[i],'notif',unreadMessages[i+1])
 
         }
 
-        console.log('friends ko', vm.myFriends)
+
 
       }).catch(function(error){
 
@@ -599,7 +600,7 @@ vm.currentUserName = response.data.currentUserName
 vm.secondUserName = response.data.secondUserName
 
 
-console.log(vm.getUserSock)
+
 
 
 }).catch(function(error){
@@ -619,14 +620,7 @@ vm.$router.push('/chat/' + chatroute)
 
 
 
-sockets:{
 
-  sendMessage(data){
-
-    console.log('myData', data)
-
-  }
-}
 }
 
 

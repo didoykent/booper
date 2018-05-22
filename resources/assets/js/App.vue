@@ -83,8 +83,13 @@ var vm =  this
     studentLogOut(){
 
       var vm  = this
+
+
+
       vm.$store.dispatch('studentLogOut')
-      vm.$socket.disconnect()
+                vm.$socket.disconnect();
+                localStorage.removeItem('sacket');
+
     }
   }
 }

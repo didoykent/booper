@@ -11303,137 +11303,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(18).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(18).setImmediate))
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(23);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(9);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(9);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
-
-/***/ }),
-/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12378,6 +12251,133 @@ var index_esm = {
 
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(23);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(9);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(9);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
@@ -13144,7 +13144,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 19 */
@@ -13337,7 +13337,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(7)))
 
 /***/ }),
 /* 20 */
@@ -13349,7 +13349,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(8);
 var Axios = __webpack_require__(22);
-var defaults = __webpack_require__(5);
+var defaults = __webpack_require__(6);
 
 /**
  * Create an instance of Axios
@@ -13432,7 +13432,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(5);
+var defaults = __webpack_require__(6);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(31);
 var dispatchRequest = __webpack_require__(32);
@@ -13973,7 +13973,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(33);
 var isCancel = __webpack_require__(11);
-var defaults = __webpack_require__(5);
+var defaults = __webpack_require__(6);
 var isAbsoluteURL = __webpack_require__(34);
 var combineURLs = __webpack_require__(35);
 
@@ -14278,7 +14278,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
 //
 //
 //
@@ -14356,8 +14356,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     studentLogOut: function studentLogOut() {
 
       var vm = this;
+
       vm.$store.dispatch('studentLogOut');
       vm.$socket.disconnect();
+      localStorage.removeItem('sacket');
     }
   }
 });
@@ -14472,7 +14474,7 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 var _mutations;
@@ -18122,6 +18124,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -18175,6 +18178,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   data: function data() {
 
@@ -18187,6 +18191,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       errors: {}
     };
   },
+
+
+  computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isLogged']),
+
   beforeMount: function beforeMount() {
 
     console.log('test');
@@ -18196,7 +18204,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     studentLogin: function studentLogin() {
       var vm = this;
-      vm.$socket.connect();
+
       vm.$store.dispatch('studentLogin', vm.model);
     },
     testData: function testData() {
@@ -20483,7 +20491,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -20648,9 +20656,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
     myFriends: {
 
-      handler: function handler(val, oldVal) {
-        console.log(val);
-      },
+      handler: function handler(val, oldVal) {},
       deep: true
     }
   },
@@ -20683,9 +20689,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     vm.$socket.on('messageNotification', function (data) {
       var vm = this;
 
-      console.log('kasulod', data.bonusdata);
-      console.log('kasulod friends', vm.myFriends);
-
       for (var i = 0; i < vm.myFriends.length; i++) {
 
         if (vm.myFriends[i]['id'] === data.bonusdata) {
@@ -20714,14 +20717,12 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     vm.$socket.on('Now', function (data) {
       if (vm.isLogged) {
 
-        console.log('sock ko dati', vm.getUserSock);
         vm.socketOp = new FormData();
 
         vm.socketOp.append('socketId', vm.$socket.id);
 
         __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('api/initializeData', vm.socketOp).then(function (response) {
 
-          console.log('una', vm.myFriends);
           for (var i = 0; i < vm.myFriends.length; i++) {
 
             if (vm.myFriends[i]['id'] === data.currentUserId) {
@@ -20736,13 +20737,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
               }
             }
           }
-          console.log('sock ko sbong', vm.getUserSock);
-
-          console.log('socket ko sbong', vm.$socket.id);
-
-          console.log('muni', response.data.userId);
-          console.log('ulihi', vm.myFriends);
-          console.log('friend ko', data.friend);
         }).catch(function (error) {});
       }
     }.bind(this));
@@ -20758,12 +20752,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         if (vm.myFriends[i]['previous_conn_id'] === data || vm.myFriends[i]['current_conn_id'] === data) {
 
           __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.myFriends[i], 'isActive', false);
-          console.log('munigd', vm.myFriends[i]['previous_conn_id']);
         }
-
-        console.log(vm.myFriends);
-        console.log('nadisconnect');
-        console.log('next ko nga socket', data);
       }
     }.bind(this));
   },
@@ -20777,10 +20766,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
   methods: {
     getTestData: function getTestData() {
 
-      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('api/testData').then(function (response) {
-
-        console.log('successFul');
-      }).catch(function (error) {
+      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('api/testData').then(function (response) {}).catch(function (error) {
 
         console.log(error);
       });
@@ -20836,7 +20822,14 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             switch (_context.prev = _context.next) {
               case 0:
                 vm = this;
-                _context.next = 3;
+
+
+                if (vm.isLogged) {
+
+                  vm.$socket.connect();
+                }
+
+                _context.next = 4;
                 return __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('api/getFriendLists').then(function (response) {
                   var unreadMessages = response.data.unreadMessages;
                   __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.$data, 'myFriends', response.data.friendLists);
@@ -20850,6 +20843,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                   vm.$socket.emit('ImOn', { currentUserId: vm.currentUserId, mySocket: vm.$socket.id, friend: response.data.currentUser });
 
                   setInterval(function () {
+
                     vm.$socket.emit('friendOnline', vm.currentUserId);
                   }, 2000);
                 }).catch(function (error) {
@@ -20857,7 +20851,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                   console.log(error);
                 });
 
-              case 3:
+              case 4:
               case 'end':
                 return _context.stop();
             }
@@ -20878,12 +20872,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('api/getUnreadMessages').then(function (response) {
         var unreadMessages = response.data.allUnread;
 
-        console.log('listKo', response.data.myLists);
         for (var i = 0; i < vm.myFriends.length; i++) {
           __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.myFriends[i], 'notif', unreadMessages[i + 1]);
         }
-
-        console.log('friends ko', vm.myFriends);
       }).catch(function (error) {
 
         console.log(error);
@@ -20910,22 +20901,12 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
         vm.currentUserName = response.data.currentUserName;
         vm.secondUserName = response.data.secondUserName;
-
-        console.log(vm.getUserSock);
       }).catch(function (error) {
 
         console.log(error);
       });
 
       vm.$router.push('/chat/' + chatroute);
-    },
-
-
-    sockets: {
-      sendMessage: function sendMessage(data) {
-
-        console.log('myData', data);
-      }
     }
   }
 
@@ -21876,7 +21857,6 @@ var render = function() {
                                           _c(
                                             "v-list-tile",
                                             {
-                                              key: item.name,
                                               attrs: { avatar: "", ripple: "" },
                                               on: {
                                                 click: function($event) {

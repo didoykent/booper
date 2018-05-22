@@ -10,11 +10,13 @@ use App\Tutor;
 use App\Message;
 use App\Student;
 
+
 class ChatController extends Controller
 {
     public function getFriendLists(Request $request){
 
 $authuser = JWTAuth::toUser(JWTAuth::getToken());
+
         if ($authuser->role == 'tutor'){
 
 
@@ -114,7 +116,7 @@ public function getCurrentUserId(){
 
   $authuser = JWTAuth::toUser(JWTAuth::getToken());
 
-  return response()->json(['currentUserId' => $authuser->id, 'role' => $authuser->role]);
+  return response()->json(['currentUserId' => $authuser->id, 'role' => $authuser->role, 'current' => $authuser->current_conn_id]);
 }
 
 

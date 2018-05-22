@@ -49,6 +49,7 @@
 <script>
 
 import axios from 'axios'
+import {mapGetters} from 'vuex'
 export default{
 
 
@@ -65,6 +66,11 @@ return{
 
 },
 
+computed:mapGetters([
+
+  'isLogged'
+]),
+
 beforeMount(){
 
 console.log('test')
@@ -74,8 +80,12 @@ console.log('test')
 
 studentLogin(){
  var vm =  this
-vm.$socket.connect()
+
+
+
 vm.$store.dispatch('studentLogin', vm.model)
+
+
 },
 
 testData(){

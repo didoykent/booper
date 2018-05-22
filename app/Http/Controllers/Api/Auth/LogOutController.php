@@ -7,11 +7,14 @@ use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
+
 class LogOutController extends Controller
 {
 
 
   public function studentLogOut(Request $request){
+
+
 
       $validator = \Validator::make($request->all(), [
 
@@ -26,6 +29,7 @@ class LogOutController extends Controller
     try {
 
     JWTAuth::invalidate($request->token);
+
           return response()->json(['success' => true]);
     } catch (JWTException $e) {
        return response()->json($e);

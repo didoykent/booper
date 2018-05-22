@@ -21,8 +21,8 @@ use Illuminate\Http\Request;
 Route::post('student_signup', 'Api\Auth\SignUpController@studentSignUp');
 Route::post('tutor_signup', 'Api\Auth\TutorSignUpController@studentSignUp');
 Route::post('student_signin', 'Api\Auth\SignInController@studentSignIn');
-
 Route::post('student_logout', 'Api\Auth\LogOutController@studentLogOut');
+
 
 Route::group(['middleware' => ['jwt.auth']], function(){
 

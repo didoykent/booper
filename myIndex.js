@@ -22,36 +22,15 @@ io.on('connection', function(socket){
 
   console.log('Client connected');
 
-console.log(socket.id)
-
-io.sockets.emit('ImOnline', socket.id)
-
-var redisClient = redis.createClient();
-
-
-redisClient.subscribe('message');
 
 
 
-redisClient.on('message', function(channel, message){
-
-  console.log('myEvent' + channel + message);
-
-  socket.emit(channel, message);
-
-});
 
 
 
-redisClient.on('disconnect', function(){
 
-redisClient.quit();
-});
 
-socket.on('new message', function(message){
 
-  console.log("myMessage" + message);
-});
 
 socket.on('latestMessage', function(latestmessage){
  var clientsConnected = 0
@@ -132,7 +111,6 @@ else if(clients.length <2){
 
 
 
-                    console.log(clients[1], clients)
 
 
 
@@ -160,8 +138,7 @@ else if(clients.length <2){
 
                io.to(latestmessage.friend['previous_conn_id']).emit('messageNotification', {bonusdata: latestmessage.myId})
                notInRoom = true
-               console.log('myFriendcurrent_conn_id', latestmessage.friend['current_conn_id'])
-               console.log('myFriendprevious_conn_id', latestmessage.friend['previous_conn_id'])
+
              }
 
              else{
@@ -169,8 +146,7 @@ else if(clients.length <2){
                  io.to(latestmessage.friend['previous_conn_id']).emit('messageNotification', {bonusdata: latestmessage.myId})
                  notInRoom = true
 
-                 console.log('myFriendcurrent_conn_id', latestmessage.friend['current_conn_id'])
-                 console.log('myFriendprevious_conn_id', latestmessage.friend['previous_conn_id'])
+
              }
 
 
@@ -188,9 +164,7 @@ else if(clients.length <2){
 
 
 
-console.log('yahoo')
-console.log(notInRoom)
-console.log(connected)
+
 
 
 
@@ -273,9 +247,7 @@ else{
 
 }
 
-console.log(io.sockets.adapter.rooms["12"]);
-console.log('his socket', data.mySocketId)
-console.log('mysocket', socket.id)
+
 
 
 })
@@ -285,7 +257,7 @@ socket.on('ImOn', function(data){
 
   users.push(socket.id)
   io.sockets.emit('Now', data)
-  console.log(users)
+
 })
 
 
@@ -298,6 +270,7 @@ socket.on('forceDisconnect', function(data){
 socket.on('disconnect', function(){
 
 
+socket.leave(defaultRoom)
 
 io.sockets.emit('userDisconnected', socket.id)
 
