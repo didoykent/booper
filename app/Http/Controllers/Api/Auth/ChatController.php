@@ -225,19 +225,66 @@ public function getMessages(Request $request){
 
 
 $currentUser = JWTAuth::toUser(JWTAuth::getToken());
-
+$scrollValue = $request->scrollValue;
 $user2 = Student::find($request->secondUser);
+
+
 
 if($currentUser->role == 'tutor'){
 
+
+  $max = true;
   $messages = Message::where('tutors_id', $currentUser->id)->where('student_id', $user2->id)->get();
+
+    if(count($messages) - $scrollValue > 21 ){
+
+        $messages = Message::where('tutors_id', $currentUser->id)->where('student_id', $user2->id)->orderBy('id', 'desc')->take($scrollValue)->get();
+        $max = false;
+}
+
+
+
+
+
+  $unReadMessages =  Message::where('tutors_id', $currentUser->id)->where('student_id', $user2->id)->where('read', 0)->get();
+
+  for($i=0; $i<count($unReadMessages); $i++){
+
+    $readMessages = Message::find($unReadMessages[$i]->id);
+    $readMessages->read = 1;
+    $readMessages->save();
+
+
+  }
 }
 else{
 
+    $max = true;
+
     $messages = Message::where('tutors_id', $user2->id)->where('student_id', $currentUser->id)->get();
+
+    if(count($messages) - $scrollValue > 21 ){
+
+        $messages = Message::where('tutors_id', $user2->id)->where('student_id', $currentUser->id)->orderBy('id', 'desc')->take($scrollValue)->get();
+          $max = false;
+    }
+
+    $unReadMessages =  Message::where('tutors_id', $user2->id)->where('student_id', $currentUser->id)->where('read', 0)->get();
+
+    for($i=0; $i<count($unReadMessages); $i++){
+
+      $readMessages = Message::find($unReadMessages[$i]->id);
+      $readMessages->read = 1;
+      $readMessages->save();
+
+
+    }
+
 }
 
-  return response()->json(['messages' => $messages, 'currentUserName' => $currentUser->en_name, 'secondUserName' => $user2->en_name]);
+
+
+  return response()->json(['messages' => $messages, 'currentUserName' => $currentUser->en_name, 'secondUserName' => $user2->en_name, 'unreadCount' => count($unReadMessages), 'scrollValue' => $scrollValue, 'max' => $max]);
 }
 
 

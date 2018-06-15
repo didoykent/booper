@@ -20213,7 +20213,7 @@ exports = module.exports = __webpack_require__(15)(false);
 
 
 // module
-exports.push([module.i, "\n.suggested > .list {\r\n  background:#EEEEEE;\r\n\r\n   overflow-y: auto;\r\nheight: calc(100vh - 9.5rem);\r\n\r\n\r\n-webkit-transform: translateY(-10%);\r\n\r\n\r\n        transform: translateY(-10%);\n}\n.scrollable {\r\n   overflow-y: auto;\r\n   height: 100vh;\n}\r\n\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n.suggested > .list {\r\n  background:#EEEEEE;\r\n\r\n   overflow-y: auto;\r\nheight: calc(100vh - 9.5rem);\r\n\r\n\r\n-webkit-transform: translateY(-10%);\r\n\r\n\r\n        transform: translateY(-10%);\n}\n.scrollable {\r\n   overflow-y: auto;\r\n   height: 100vh;\n}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -20607,6 +20607,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
+//
+//
 
 
 
@@ -20641,30 +20644,33 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       currentUser: '',
       secondUser: '',
       tempMessage: '',
+      messageStorage: [],
+
+      messageValue: 0,
       tempName: '',
       currentUserName: '',
       secondUserName: '',
       currentUserId: '',
       currentUserRole: '',
-      isActive: true
+      initializeMessage: -20,
+      isActive: true,
+      file: undefined,
+      audio: undefined,
+      scrollValue: 20,
+      max: false
 
     };
   },
 
 
-  watch: {
-
-    myFriends: {
-
-      handler: function handler(val, oldVal) {},
-      deep: true
-    }
-  },
+  watch: {},
 
   computed: Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["b" /* mapGetters */])(['isLogged']),
 
   mounted: function mounted() {
+
     var vm = this;
+
     vm.$socket.on('sendMessage', function (data) {
       vm.myMessages.push({ 'avatar': 'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-1/p160x160/29468236_901369833374211_8734349036217171968_n.jpg?_nc_cat=0&oh=f8f7428a3e9e807d58b3ef91ef215062&oe=5B760837', 'name': vm.secondUserName, 'message': data.message });
       var myData = data.messagedata;
@@ -20769,6 +20775,37 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('api/testData').then(function (response) {}).catch(function (error) {
 
         console.log(error);
+      });
+    },
+    initScroll: function initScroll() {
+      var vm = this;
+
+      var container = vm.$el.querySelector('.suggested > .list ');
+      container.addEventListener("scroll", function () {
+
+        if (container.scrollTop === 0 && vm.max === false) {
+
+          vm.myFriend = new FormData();
+
+          vm.myFriend.append('secondUser', vm.secondUser);
+          vm.myFriend.append('scrollValue', vm.scrollValue);
+
+          __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/getMessages', vm.myFriend).then(function (response) {
+
+            vm.max = response.data.max;
+
+            console.log(response.data.scrollValue);
+
+            __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.$data, 'myMessages', response.data.messages);
+
+            vm.scrollValue += 20;
+            vm.currentUserName = response.data.currentUserName;
+            vm.secondUserName = response.data.secondUserName;
+          }).catch(function (error) {
+
+            console.log(error);
+          });
+        }
       });
     },
     sendMessage: function sendMessage() {
@@ -20880,9 +20917,12 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         console.log(error);
       });
     },
-    selectFriend: function selectFriend(id, chatroute, item) {
+    selectFriend: function selectFriend(id, chatroute, item, index) {
 
       var vm = this;
+      vm.max = false;
+      vm.scrollValue = 20;
+      vm.$router.push('/chat/' + chatroute);
 
       vm.secondUser = id;
       vm.getUserSock = item;
@@ -20894,19 +20934,32 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       vm.myFriend = new FormData();
 
       vm.myFriend.append('secondUser', id);
+      vm.myFriend.append('scrollValue', vm.scrollValue);
 
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/getMessages', vm.myFriend).then(function (response) {
 
+        console.log(response.data.scrollValue);
+        console.log('messages length', response.data.messages.length);
+        vm.max = response.data.max;
+
         __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.$data, 'myMessages', response.data.messages);
 
+        vm.scrollValue += 20;
         vm.currentUserName = response.data.currentUserName;
         vm.secondUserName = response.data.secondUserName;
+
+        if (vm.myMessages) {
+
+          __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(vm.myFriends[index], 'notif', 0);
+
+          vm.scrollToEnd();
+
+          vm.initScroll();
+        }
       }).catch(function (error) {
 
         console.log(error);
       });
-
-      vm.$router.push('/chat/' + chatroute);
     }
   }
 
@@ -21722,7 +21775,7 @@ var render = function() {
                     [
                       _c("v-subheader", [_vm._v("Contact Lists")]),
                       _vm._v(" "),
-                      _vm._l(_vm.myFriends, function(item) {
+                      _vm._l(_vm.myFriends, function(item, index) {
                         return _c(
                           "v-list-tile",
                           {
@@ -21730,7 +21783,12 @@ var render = function() {
                             attrs: { avatar: "" },
                             on: {
                               click: function($event) {
-                                _vm.selectFriend(item.id, item.chatroute, item)
+                                _vm.selectFriend(
+                                  item.id,
+                                  item.chatroute,
+                                  item,
+                                  index
+                                )
                               }
                             }
                           },
@@ -21796,14 +21854,23 @@ var render = function() {
                                       [_vm._v("chat_bubble")]
                                     ),
                                     _vm._v(" "),
-                                    _c(
-                                      "span",
-                                      {
-                                        attrs: { slot: "badge" },
-                                        slot: "badge"
-                                      },
-                                      [_vm._v(_vm._s(item.notif))]
-                                    )
+                                    item.notif < 51
+                                      ? _c(
+                                          "span",
+                                          {
+                                            attrs: { slot: "badge" },
+                                            slot: "badge"
+                                          },
+                                          [_vm._v(_vm._s(item.notif))]
+                                        )
+                                      : _c(
+                                          "span",
+                                          {
+                                            attrs: { slot: "badge" },
+                                            slot: "badge"
+                                          },
+                                          [_vm._v("50+")]
+                                        )
                                   ],
                                   1
                                 )
@@ -21847,7 +21914,10 @@ var render = function() {
                                 [
                                   _c(
                                     "v-list",
-                                    { attrs: { "two-line": "" } },
+                                    {
+                                      staticClass: "suggested-list",
+                                      attrs: { "two-line": "" }
+                                    },
                                     [
                                       _vm._l(_vm.myMessages, function(
                                         item,
@@ -21904,7 +21974,16 @@ var render = function() {
                                       })
                                     ],
                                     2
-                                  )
+                                  ),
+                                  _vm._v(" "),
+                                  _c("audio", {
+                                    ref: "player",
+                                    attrs: {
+                                      id: "player",
+                                      value: "hidden",
+                                      src: _vm.file
+                                    }
+                                  })
                                 ],
                                 1
                               ),

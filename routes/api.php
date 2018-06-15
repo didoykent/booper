@@ -14,9 +14,9 @@ use Illuminate\Http\Request;
 */
 
 
-
-
-
+Route::get('/', ['as' => 'home_path', 'uses' => function () {
+    return view('welcome');
+}]);
 
 Route::post('student_signup', 'Api\Auth\SignUpController@studentSignUp');
 Route::post('tutor_signup', 'Api\Auth\TutorSignUpController@studentSignUp');

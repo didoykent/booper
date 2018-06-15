@@ -12,7 +12,7 @@
 
        <v-list subheader>
          <v-subheader>Contact Lists</v-subheader>
-         <v-list-tile avatar v-for="item in myFriends" :key="item.en_name" @click="selectFriend(item.id, item.chatroute, item)">
+         <v-list-tile avatar v-for="(item, index) in myFriends" :key="item.en_name" @click="selectFriend(item.id, item.chatroute, item, index)">
            <v-list-tile-avatar>
              <img :src="'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-9/26734343_1963222710598716_4444436793604184869_n.jpg?_nc_cat=0&oh=7d16dfb49268afd4c548d37a9f4a6f77&oe=5B373C24'">
 
@@ -27,7 +27,8 @@
 
               <v-badge left>
              <v-icon :color="item.active ? 'teal' : 'grey'">chat_bubble</v-icon>
-             <span slot="badge">{{item.notif}}</span>
+             <span  v-if = "item.notif < 51 " slot="badge">{{item.notif}}</span>
+              <span  v-else slot="badge">50+</span>
               </v-badge>
            </v-list-tile-action>
          </v-list-tile>
@@ -47,7 +48,7 @@
 
 
 <div  class="suggested">
-  <v-list two-line>
+  <v-list two-line class = "suggested-list">
             <template v-for="(item, index) in myMessages"  >
               <v-list-tile
                 avatar
@@ -68,6 +69,8 @@
               <v-divider v-if="index + 1 < myMessages.length" :key="index"></v-divider>
             </template>
           </v-list>
+
+          <audio id="player" ref="player" value = "hidden" :src="file"></audio>
          </div>
 
 
@@ -189,12 +192,21 @@ return {
         currentUser: '',
         secondUser: '',
         tempMessage: '',
+        messageStorage: [],
+
+        messageValue: 0,
         tempName: '',
         currentUserName: '',
         secondUserName: '',
         currentUserId : '',
         currentUserRole: '',
-        isActive: true
+        initializeMessage: -20,
+        isActive: true,
+        file: undefined,
+        audio: undefined,
+        scrollValue: 20,
+        max: false
+
 
 }
 
@@ -204,13 +216,9 @@ return {
 
 watch:{
 
-myFriends:{
 
-  handler: function (val, oldVal) {
 
-       },
-       deep: true
-}
+
 },
 
 computed:mapGetters([
@@ -220,7 +228,11 @@ computed:mapGetters([
 
 
 mounted(){
+
+
 var vm= this
+
+
   vm.$socket.on('sendMessage', function(data){
   vm.myMessages.push({'avatar' : 'https://scontent.ficn2-1.fna.fbcdn.net/v/t1.0-1/p160x160/29468236_901369833374211_8734349036217171968_n.jpg?_nc_cat=0&oh=f8f7428a3e9e807d58b3ef91ef215062&oe=5B760837', 'name': vm.secondUserName, 'message': data.message})
 var myData = data.messagedata
@@ -399,26 +411,19 @@ vm.friendLists()
 
 
 
+
 beforeMount(){
 var vm = this
+
+
+
+
 
 this.friendLists()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 },
+
 
 methods:{
 
@@ -436,6 +441,68 @@ axios.get('api/testData').then(function(response){
 })
 
 },
+
+
+
+initScroll(){
+var vm = this
+
+var container = vm.$el.querySelector('.suggested > .list ')
+container.addEventListener("scroll", ()=>{
+
+if(container.scrollTop === 0 && vm.max === false){
+
+
+  vm.myFriend = new FormData();
+
+
+  vm.myFriend.append('secondUser', vm.secondUser)
+  vm.myFriend.append('scrollValue', vm.scrollValue)
+
+  axios.post('/api/getMessages', vm.myFriend).then(function(response){
+
+
+  vm.max = response.data.max
+
+  console.log(response.data.scrollValue)
+
+
+
+
+  Vue.set(vm.$data, 'myMessages', response.data.messages)
+
+
+  vm.scrollValue+=20
+  vm.currentUserName = response.data.currentUserName
+  vm.secondUserName = response.data.secondUserName
+
+
+
+
+  }).catch(function(error){
+
+    console.log(error)
+  })
+
+
+
+
+}
+
+
+
+
+
+})
+
+
+},
+
+
+
+
+
+
 
 
 
@@ -498,6 +565,9 @@ scrollToEnd () {
         this.busy = false;
       }, 1000);
     },
+
+
+
 
 
 
@@ -569,10 +639,12 @@ vm.$socket.emit('friendOnline', vm.currentUserId)
     },
 
 
-    selectFriend(id, chatroute, item){
+    selectFriend(id, chatroute, item, index){
 
 var vm = this
-
+vm.max = false
+vm.scrollValue = 20
+vm.$router.push('/chat/' + chatroute)
 
 
 
@@ -588,27 +660,41 @@ vm.myFriend = new FormData();
 
 
 vm.myFriend.append('secondUser', id)
-
+vm.myFriend.append('scrollValue', vm.scrollValue)
 
 axios.post('/api/getMessages', vm.myFriend).then(function(response){
 
 
 
+
+console.log(response.data.scrollValue)
+  console.log('messages length', response.data.messages.length)
+vm.max = response.data.max
+
 Vue.set(vm.$data, 'myMessages', response.data.messages)
 
+
+vm.scrollValue+=20
 vm.currentUserName = response.data.currentUserName
 vm.secondUserName = response.data.secondUserName
 
 
+if(vm.myMessages){
+
+Vue.set(vm.myFriends[index], 'notif', 0)
+
+vm.scrollToEnd()
 
 
+vm.initScroll()
+
+}
 
 }).catch(function(error){
 
   console.log(error)
 })
 
-vm.$router.push('/chat/' + chatroute)
 
 
 
@@ -651,7 +737,12 @@ transform: translateY(-10%);
 .scrollable {
    overflow-y: auto;
    height: 100vh;
+
  }
+
+
+
+
 
 
 

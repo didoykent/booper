@@ -89,6 +89,7 @@ var vm =  this
       vm.$store.dispatch('studentLogOut')
                 vm.$socket.disconnect();
                 localStorage.removeItem('sacket');
+                
 
     }
   }

@@ -59,7 +59,7 @@ notInRoom = false
                         connected = true
                       io.to(clients[i]).emit('sendMessage', {message: latestmessage.message, friend: latestmessage.friend, messagedata: latestmessage.messagedata, clientsData: clients, bonusdata: latestmessage.bonusdata, isConnected:connected})
 
-
+              
                     }
 
                   }
@@ -182,7 +182,7 @@ socket.on('friendOnline', function(data){
 })
 
 socket.on('roomdata', function(data){
-
+  socket.leave(defaultRoom)
 if(data.currentRole == 'tutor'){
 
   if(defaultRoom){
