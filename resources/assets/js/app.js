@@ -19,7 +19,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify);
-Vue.use(VueSocketio, 'http://localhost:8890');
+Vue.use(VueSocketio, 'http://209.97.167.20:9000');
 
 axios.interceptors.request.use(function(config){
 
